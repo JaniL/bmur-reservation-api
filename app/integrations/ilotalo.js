@@ -15,10 +15,22 @@ const ilotalo = axios.create({
 const getReservations = () => {
   const parseReservations = data => {
     const getId = href => href && Number(href.split('&id=')[1])
-    const parseDate = dateText =>
-      DateTime.fromFormat(dateText, 'dd.MM.yyyy HH:mm', {
-        zone: 'Europe/Helsinki'
-      }).toJSDate()
+    const parseDate = dateText => {
+      const dateFormats = ['dd.MM.yyyy HH:mm:ss', 'dd.MM.yyyy HH:mm']
+      const dateString = (dateText || '').trim()
+
+      for (const dateFormat of dateFormats) {
+        const parsedDate = DateTime.fromFormat(dateString, dateFormat, {
+          zone: 'Europe/Helsinki'
+        })
+
+        if (parsedDate.isValid) {
+          return parsedDate.toJSDate()
+        }
+      }
+
+      return null
+    }
     const serializeRow = (i, el) => ({
       id: getId(
         $(el)
@@ -43,11 +55,15 @@ const getReservations = () => {
           .text() === 'suljettu'
     })
     const $ = cheerio.load(data)
-    const rowSelector = '#keyTable > table > tbody > tr'
+    const rowSelector =
+      '.keyTable > table > tbody > tr, #keyTable > table > tbody > tr'
 
     const rows = $(rowSelector)
 
-    return rows.map(serializeRow).get()
+    return rows
+      .map(serializeRow)
+      .get()
+      .filter(reservation => Number.isFinite(reservation.id))
   }
   return ilotalo
     .get('/index.php?page=reservation&f=3')
