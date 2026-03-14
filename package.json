@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node app/server.js",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run --globals",
+    "test:watch": "vitest --globals"
   },
   "dependencies": {
     "axios": "^0.21.1",

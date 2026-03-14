@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const port = process.env.PORT || 3000
 
 const {
   getAllReservations,
@@ -18,6 +19,10 @@ app.get(
 )
 app.get('/reservations/past/association/:association', getPastReservations)
 
-app.listen(process.env.PORT || 3000, () =>
-  console.log('bmur reservation api listening on port 3000!')
-)
+if (require.main === module) {
+  app.listen(port, () =>
+    console.log(`bmur reservation api listening on port ${port}!`)
+  )
+}
+
+module.exports = app
