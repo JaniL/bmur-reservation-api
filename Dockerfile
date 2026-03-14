@@ -9,5 +9,7 @@ RUN yarn install
 
 COPY . /usr/app
 
+RUN yarn build
+
 EXPOSE 3000
-CMD node app/server.js
+CMD node dist/server.js
