@@ -1,12 +1,13 @@
-const express = require('express')
-const app = express()
-const port = process.env.PORT || 3000
+import express from 'express'
 
-const {
+import {
   getAllReservations,
   getUpcomingReservations,
   getPastReservations
-} = require('./controllers/reservations')
+} from './controllers/reservations'
+
+const app = express()
+const port = Number(process.env.PORT || 3000)
 
 app.get('/reservations/all', getAllReservations)
 app.get('/reservations/all/association/:association', getAllReservations)
@@ -25,4 +26,4 @@ if (require.main === module) {
   )
 }
 
-module.exports = app
+export default app

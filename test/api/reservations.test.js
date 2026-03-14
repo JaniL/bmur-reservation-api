@@ -41,17 +41,18 @@ const createFixture = ({ pastDate, futureDate }) => `
 `
 
 const loadFreshApp = () => {
-  const integrationPath = require.resolve('../../app/integrations/ilotalo.js')
+  const integrationPath = require.resolve('../../dist/integrations/ilotalo.js')
   const controllerPath = require.resolve(
-    '../../app/controllers/reservations.js'
+    '../../dist/controllers/reservations.js'
   )
-  const serverPath = require.resolve('../../app/server.js')
+  const serverPath = require.resolve('../../dist/server.js')
 
   delete require.cache[integrationPath]
   delete require.cache[controllerPath]
   delete require.cache[serverPath]
 
-  return require('../../app/server.js')
+  const serverModule = require('../../dist/server.js')
+  return serverModule.default || serverModule
 }
 
 describe('reservation endpoints', () => {

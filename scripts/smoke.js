@@ -33,7 +33,7 @@ const getCount = async endpoint => {
   return Array.isArray(payload) ? payload.length : null
 }
 
-const server = spawn('node', ['app/server.js'], {
+const server = spawn('tsx', ['app/server.ts'], {
   env: {
     ...process.env,
     PORT: String(port)

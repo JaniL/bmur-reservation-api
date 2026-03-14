@@ -8,10 +8,9 @@
     "skipLibCheck": true,
     "rootDir": "app",
     "outDir": "dist",
-    "allowJs": true,
-    "checkJs": false,
+    "allowJs": false,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["app/**/*"],
+  "include": ["app/**/*.ts"],
   "exclude": ["dist", "node_modules", "test"]
 }

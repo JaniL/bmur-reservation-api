@@ -14,7 +14,7 @@ const loadFreshIlotalo = () => {
     __dirname,
     '..',
     '..',
-    'app',
+    'dist',
     'integrations',
     'ilotalo.js'
   )
