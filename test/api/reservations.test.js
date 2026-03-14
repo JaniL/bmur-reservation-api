@@ -114,4 +114,18 @@ describe('reservation endpoints', () => {
     expect(pastResponse.body).toHaveLength(1)
     expect(pastResponse.body[0].id).toBe(1001)
   })
+
+  it('returns a 502 response when upstream fetch fails', async () => {
+    nock('https://ilotalo.matlu.fi')
+      .get('/index.php?page=reservation&f=3')
+      .reply(500, 'upstream error')
+
+    const app = loadFreshApp()
+    const response = await request(app).get('/reservations/all')
+
+    expect(response.status).toBe(502)
+    expect(response.body).toMatchObject({
+      error: 'Failed to fetch reservations from upstream service'
+    })
+  })
 })

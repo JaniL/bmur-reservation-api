@@ -12,11 +12,19 @@ const filterByAssociation = association => reservations =>
 const maybeFilterByAssociation = association => reservations =>
   association ? filterByAssociation(association)(reservations) : reservations
 
+const handleReservationsError = res => error => {
+  res.status(502).json({
+    error: 'Failed to fetch reservations from upstream service',
+    detail: error && error.message ? error.message : 'Unknown error'
+  })
+}
+
 const getAllReservations = (req, res) =>
   ilotalo
     .getReservations()
     .then(maybeFilterByAssociation(req.params.association))
     .then(reservations => res.json(reservations))
+    .catch(handleReservationsError(res))
 
 const getUpcomingReservations = (req, res) =>
   ilotalo
@@ -24,6 +32,7 @@ const getUpcomingReservations = (req, res) =>
     .then(filterUpcoming)
     .then(maybeFilterByAssociation(req.params.association))
     .then(reservations => res.json(reservations))
+    .catch(handleReservationsError(res))
 
 const getPastReservations = (req, res) =>
   ilotalo
@@ -31,6 +40,7 @@ const getPastReservations = (req, res) =>
     .then(filterPast)
     .then(maybeFilterByAssociation(req.params.association))
     .then(reservations => res.json(reservations))
+    .catch(handleReservationsError(res))
 
 module.exports = {
   getAllReservations,
